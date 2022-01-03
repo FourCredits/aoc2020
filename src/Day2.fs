@@ -36,8 +36,5 @@ let part1 = solve valid1
 let part2 = solve valid2
 
 let main lines =
-    let parsed =
-        lines
-        |> Seq.map parse
-        |> Seq.toList
+    let parsed = lines |> Seq.map parse |> Seq.toList
     printfn $"{part1 parsed}, {part2 parsed}"

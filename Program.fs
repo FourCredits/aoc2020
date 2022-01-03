@@ -1,11 +1,15 @@
 ﻿module Program
 
-let (mains:(string seq -> unit) list) = [ Day1.main; Day2.main ]
-
 [<EntryPoint>]
 let main args = 
     let day = int args[0]
-    let input = System.IO.File.ReadAllLines $"resources/{day}.txt"
-    let f = mains[day - 1]
+    let ((f, file):(string seq -> unit) * string) =
+        match day with
+            | 1 -> (Day1.main, "resources/1.txt")
+            | 2 -> (Day2.main, "resources/2.txt")
+            | 3 -> (Day3.main, "resources/3.txt")
+            | 4 -> (Day4.main, "resources/4.txt")
+            | _ -> failwith "day not implemented yet"
+    let input = System.IO.File.ReadLines file
     f input
     0
