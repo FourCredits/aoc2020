@@ -1,5 +1,7 @@
 module Day4
 
+open Utils
+
 let example =
     let str = "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
 byr:1937 iyr:2017 cid:147 hgt:183cm
@@ -15,17 +17,6 @@ hgt:179cm
 hcl:#cfa07d eyr:2025 pid:166559648
 iyr:2011 ecl:brn hgt:59in"
     str.Split("\n") |> Seq.toList
-
-let rec split x xs =
-    if Seq.isEmpty xs then
-        Seq.empty
-    else
-        let head = Seq.takeWhile ((<>) x) xs
-        let tail = Seq.skipWhile ((<>) x) xs
-        if Seq.isEmpty tail then
-            seq { head }
-        else
-            seq { yield head; yield! (split x (Seq.tail tail)) }
 
 let parse (lines:string seq) =
     let parseLine (line:string) =
