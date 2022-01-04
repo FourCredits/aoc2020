@@ -3,7 +3,7 @@
 [<EntryPoint>]
 let main args = 
     let day = int args[0]
-    let ((f, file):(string seq -> unit) * string) =
+    let (f, file) =
         match day with
             | 1 -> (Day1.main, "resources/1.txt")
             | 2 -> (Day2.main, "resources/2.txt")
@@ -12,6 +12,7 @@ let main args =
             | 5 -> (Day5.main, "resources/5.txt")
             | 6 -> (Day6.main, "resources/6.txt")
             | 7 -> (Day7.main, "resources/7.txt")
+            | 8 -> (Day8.main, "resources/8.txt")
             | _ -> failwith "day not implemented yet"
     let input = System.IO.File.ReadLines file
     f input
