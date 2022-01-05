@@ -16,6 +16,8 @@
     <Compile Include="src/Day7.fs" />
     <Compile Include="src/Day8.fs" />
     <Compile Include="src/Day9.fs" />
+    <Compile Include="src/Day10.fs" />
+    <Compile Include="src/Day11.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
