@@ -1,5 +1,7 @@
 module Day3
 
+open Utils
+
 let example =
     let str = "..##.......
 #...#...#..
@@ -18,8 +20,6 @@ let parse lines =
     lines
     |> Seq.map (Seq.toList >> List.map (fun x -> x = '#'))
     |> Seq.toList
-
-let rec iterate f x = seq { yield x; yield! (iterate f (f x))}
 
 let treesHit map (dy, dx) =
     let finish = List.length map

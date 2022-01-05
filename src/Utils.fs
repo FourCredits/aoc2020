@@ -11,3 +11,12 @@ let rec split x xs =
         else
             seq { yield head; yield! (split x (Seq.tail tail)) }
 
+let rec iterate f x = seq { yield x; yield! (iterate f (f x))}
+
+let converge step =
+    iterate step
+    >> Seq.pairwise
+    >> Seq.skipWhile (fun (x, y) -> x <> y)
+    >> Seq.head
+    >> snd
+
