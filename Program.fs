@@ -18,6 +18,7 @@ let main args =
             | 11 -> (Day11.main, "resources/11.txt")
             | 12 -> (Day12.main, "resources/12.txt")
             | 13 -> (Day13.main, "resources/13.txt")
+            | 14 -> (Day14.main, "resources/14.txt")
             | _ -> failwith "day not implemented yet"
     let input = System.IO.File.ReadLines file
     f input
