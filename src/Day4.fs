@@ -37,13 +37,9 @@ let lookup pass field =
     |> Seq.head
     |> snd
 
-let isDigit c = 48 <= int c && int c <= 57
-
-let isHexDigit c = isDigit c || Seq.contains c "abcdef"
-
 let validHgt field =
-    let num = String.filter isDigit field |> int
-    let u = String.filter (fun c -> not (isDigit c)) field
+    let num = String.filter Utils.isDigit field |> int
+    let u = String.filter (fun c -> not (Utils.isDigit c)) field
     match u with
        | "cm" -> 150 <= num && num <= 193
        | "in" -> 59 <= num && num <= 76
@@ -59,9 +55,9 @@ let valid2 pass =
         | [("byr", byr); ("ecl", ecl); ("eyr", eyr); ("hcl", hcl)
            ("hgt", hgt); ("iyr", iyr); ("pid", pid)] ->
            Seq.reduce (&&) [
-            String.length pid = 9 && String.forall isDigit pid
+            String.length pid = 9 && String.forall Utils.isDigit pid
             Seq.contains ecl ["amb"; "blu"; "brn"; "gry"; "grn"; "hzl"; "oth"]
-            hcl[0] = '#' && String.forall isHexDigit (hcl[1..])
+            hcl[0] = '#' && String.forall Utils.isHexDigit (hcl[1..])
             2020 <= int eyr && int eyr <= 2030
             2010 <= int iyr && int iyr <= 2020
             1920 <= int byr && int byr <= 2002

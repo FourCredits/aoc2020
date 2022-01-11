@@ -1,5 +1,9 @@
 module Utils
 
+let isDigit c = 48 <= int c && int c <= 57
+
+let isHexDigit c = isDigit c || Seq.contains c "abcdef"
+
 let rec split x xs =
     if Seq.isEmpty xs then
         Seq.empty
