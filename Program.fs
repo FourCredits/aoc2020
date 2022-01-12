@@ -1,7 +1,7 @@
 ﻿module Program
 
 let runDay (f, input) =
-    let input = System.IO.File.ReadLines input
+    let input = System.IO.File.ReadAllLines input
     f input
 
 [<EntryPoint>]
