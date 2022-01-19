@@ -4,7 +4,7 @@ open Utils.Parse
 
 #nowarn "40"
 let part1 lines =
-    let rec exprParser = 
+    let rec exprParser =
         let recur = P (fun s -> parse exprParser s)
         let brackets = (surround (stringP "(") (stringP ")") recur)
         let operand = intP <|>? brackets
