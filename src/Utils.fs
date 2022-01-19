@@ -1,5 +1,10 @@
 module Utils
 
+// Turning a string into a sequence of lines
+// -----------------------------------------
+
+let exampleify (str: string) = str.Split "\n"
+
 // Sketching out various things
 // ----------------------------
 
@@ -48,7 +53,6 @@ let converge step =
 // Parsing
 // ------
 
-[<AutoOpenAttribute>]
 module Parse =
     type 'a Parser = P of (string -> ('a * string) option)
 
@@ -57,6 +61,8 @@ module Parse =
     let (<?>) f (P p) = P (fun s -> p s |> Option.map (first f))
 
     let ret a = P (fun s -> Some (a, s))
+
+    let fail = P (fun _ -> None)
 
     let (>>=?) (P pa: 'a Parser) (pm: ('a -> 'b Parser)): 'b Parser =
         P (fun s -> pa s |> Option.bind (fun (a, rest) -> parse (pm a) rest))
@@ -96,7 +102,7 @@ module Parse =
 
     let peek: char Parser =
         P (fun s -> if s = "" then None else Some(s[0], s))
-    
+
     let charP c = P (fun s -> parse get s |> Option.filter (fst >> (=) c))
 
     let stringP (s: string) =
@@ -123,3 +129,21 @@ module Parse =
     let many1 p = (List.insertAt 0) <?> p <*>? many p
 
     let ws = many1 (charP ' ' <|>? charP '\t' <|>? charP '\n') >>? ret ()
+
+    let exactly (P p) = P (fun s ->
+        match p s with
+        | Some (a, "") -> Some (a, "")
+        | _ -> None)
+
+    let sepBy (p: 'a Parser) (sep: 'b Parser): 'a list Parser =
+        (fun x xs -> x :: xs) <?> p <*>? many (sep >>? p)
+
+    let anyOf (ps : 'a Parser seq): 'a Parser = ps |> Seq.reduce (<|>?)
+
+    // A version of `many`, which counts how many of `p` it parses
+    let rec countMany (p: 'a Parser): (int * 'a list) Parser = P (fun s ->
+        match parse p s with
+        | Some (x, s') ->
+            parse (countMany p) s'
+            |> Option.map (fun ((n, xs), s'') -> (((1 + n), x :: xs), s''))
+        | None -> Some ((0, []), s))
