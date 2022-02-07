@@ -58,12 +58,11 @@ let lineUp tile1 tile2 =
 
 let part1 (tiles: Tile seq) =
     [ for (Tile (id, _)) as t1 in tiles do
-        Seq.except [t1] tiles
-        |> Seq.filter (fun t2 -> lineUp t1 t2)
-        |> Seq.length
-        |> (fun n -> (id, n))]
-    |> List.filter (snd >> ((=) 2))
-    |> List.map fst
+        let n =
+            tiles
+            |> Seq.filter (fun t2 -> t1 <> t2 && lineUp t1 t2)
+            |> Seq.length
+        if n = 2 then id ]
     |> List.reduce (*)
 
 let corners (grid: 'a array array): 'a array =
