@@ -20,9 +20,7 @@ let second f (a, b) = (a, f b)
 // Character predicates
 // --------------------
 
-let isDigit c = 48 <= int c && int c <= 57
-
-let isHexDigit c = isDigit c || Seq.contains c "abcdef"
+let isHexDigit c = System.Char.IsDigit c || Seq.contains c "abcdef"
 
 // Dealing with lists
 // ------------------
@@ -103,7 +101,12 @@ module Parse =
     let peek: char Parser =
         P (fun s -> if s = "" then None else Some(s[0], s))
 
-    let charP c = P (fun s -> parse get s |> Option.filter (fst >> (=) c))
+    let satisfy (predicate: char -> bool) (parser: char Parser): char Parser =
+        P (fun s -> parse get s |> Option.filter (fst >> predicate))
+
+    let charP c = satisfy ((=) c) get
+
+    let alphaP: char Parser = satisfy (System.Char.IsLetter) get
 
     let stringP (s: string) =
         s
@@ -113,7 +116,7 @@ module Parse =
         |> map System.String.Concat
 
     let intP = P (fun s ->
-        let intPart = s |> Seq.takeWhile isDigit |> System.String.Concat
+        let intPart = s |> Seq.takeWhile System.Char.IsDigit |> System.String.Concat
         let rest = s.Substring(intPart.Length)
         if intPart = "" then None else Some(int64 intPart, rest))
 
@@ -147,3 +150,5 @@ module Parse =
             parse (countMany p) s'
             |> Option.map (fun ((n, xs), s'') -> (((1 + n), x :: xs), s''))
         | None -> Some ((0, []), s))
+
+    let wordP: string Parser = many1 alphaP |> map System.String.Concat
