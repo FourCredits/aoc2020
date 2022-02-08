@@ -29,6 +29,7 @@ let main args =
         (Day20.main, "resources/20.txt")
         (Day21.main, "resources/21.txt")
         (Day22.main, "resources/22.txt")
+        (Day23.main, "resources/23.txt")
     |]
     if args.[0] = "all" then days |> Array.iter runDay
     else
