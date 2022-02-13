@@ -41,6 +41,12 @@ let rec split x xs =
 
 let rec iterate f x = seq { yield x; yield! (iterate f (f x))}
 
+let iterateN f n start =
+    let mutable state = start
+    for _ = 1 to n do
+        state <- f state
+    state
+
 let converge step =
     iterate step
     >> Seq.pairwise
